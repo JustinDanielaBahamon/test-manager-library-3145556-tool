@@ -48,3 +48,19 @@ No hay prórroga: suban avances parciales con commits pequeños durante la prueb
 | [`test-manager-library-3145556-page`](https://github.com/code-sena/test-manager-library-3145556-page) | Sitio público estático de presentación |
 | [`test-manager-library-3145556-infra`](https://github.com/code-sena/test-manager-library-3145556-infra) | Contenedores, red, volúmenes y motor de base de datos vacío |
 | [`test-manager-library-3145556-tool`](https://github.com/code-sena/test-manager-library-3145556-tool) | Utilidades: sembrador de datos de demostración |
+
+## This fork — demo seeder (T-21)
+
+`seed.mjs` loads demo data **through the API only** (data-model.md §9): 40 books, 10 members, 15 loans, 3 of them returned.
+
+```bash
+API_URL=http://localhost:8000/api/v1 ADMIN_USERNAME=admin ADMIN_PASSWORD=your-password node seed.mjs
+```
+
+### Known gap: the 3 overdue lines
+
+T-21 asks for 3 overdue lines after seeding. A loan created now is due in 14 days (CA-06.6), and the API offers no way to
+set `loaned_at` in the past: the contract has no such field and loans cannot be edited (CA-06.7). Writing them with SQL
+would break the rule that the seeder uses the API. So this seeder does **not** fake overdue loans; the gap is reported to
+the spec owner. Options that keep the business intact: a test-only clock in the API (`Clock` port, D-05) enabled by
+environment, or waiting 14 days.

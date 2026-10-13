@@ -1,0 +1,9 @@
+{
+  "name": "manager-library-tool",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "node seed.mjs"
+  },
+  "engines": { "node": ">=18" }
+}
